@@ -3,8 +3,7 @@ import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { AppShell } from "@/components/app-shell";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppStateProvider } from "@/lib/app-state";
-import { fetchLiveToken } from "@/lib/live-token";
-import { PROTOCOL } from "@/lib/tokens";
+import { PROTOCOL } from "@/lib/protocol";
 import { Web3Provider } from "@/components/web3-provider";
 import "./globals.css";
 
@@ -26,11 +25,10 @@ const display = Space_Grotesk({
 export const metadata: Metadata = {
   title: PROTOCOL.name,
   description: PROTOCOL.tagline,
-  icons: { icon: "/logo.jpg", apple: "/logo.jpg" },
+  icons: { icon: "/icon.svg" },
 };
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const live = await fetchLiveToken();
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
@@ -39,7 +37,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full">
         <Web3Provider>
-          <AppStateProvider initialLive={live}>
+          <AppStateProvider>
             <TooltipProvider>
               <AppShell>{children}</AppShell>
             </TooltipProvider>

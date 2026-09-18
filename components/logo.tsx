@@ -3,10 +3,10 @@ export function Logo({ className }: { className?: string }) {
     // eslint-disable-next-line @next/next/no-img-element
     <img
       className={className ? `brand-mark ${className}` : "brand-mark"}
-      src="/logo.jpg"
+      src="/icon.svg"
       width={32}
       height={32}
-      alt="Helix"
+      alt="Helix.fun"
     />
   );
 }

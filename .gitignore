@@ -18,6 +18,12 @@
 /out/
 /agent-tools/
 
+# launchpad runtime store
+/data/launchpad.json
+/contracts/out
+/cache
+
+
 # production
 /build
 

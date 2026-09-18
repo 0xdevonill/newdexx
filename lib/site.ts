@@ -1,3 +1,5 @@
+import { PROTOCOL } from "@/lib/protocol";
+
 function env(name: string, fallback = ""): string {
   const v = (process.env[name] ?? "").trim();
   return v || fallback;
@@ -6,17 +8,17 @@ function env(name: string, fallback = ""): string {
 export const DEMO_TOKEN_CONTRACT =
   "0x1Ad69dDD9D98dD71b6211339A1801fD128A3925D";
 
-export const BRAND_LOGO = "/logo.jpg";
+export const BRAND_LOGO = "/icon.svg";
 
 export const site = {
-  tokenSymbol: env("NEXT_PUBLIC_TOKEN_SYMBOL"),
-  tokenName: env("NEXT_PUBLIC_TOKEN_NAME"),
+  tokenSymbol: env("NEXT_PUBLIC_TOKEN_SYMBOL", PROTOCOL.token),
+  tokenName: env("NEXT_PUBLIC_TOKEN_NAME", PROTOCOL.name),
   tokenContract: env("NEXT_PUBLIC_TOKEN_CONTRACT", DEMO_TOKEN_CONTRACT),
   tokenContractSol: env("NEXT_PUBLIC_TOKEN_CONTRACT_SOL"),
   tokenLogo: env("NEXT_PUBLIC_TOKEN_LOGO"),
-  tokenInfo: env("NEXT_PUBLIC_TOKEN_INFO"),
-  xUrl: env("NEXT_PUBLIC_X_URL", "https://x.com/helixliquidity"),
-  discordUrl: env("NEXT_PUBLIC_DISCORD_URL", "https://discord.gg/helixliquidity"),
+  tokenInfo: env("NEXT_PUBLIC_TOKEN_INFO", PROTOCOL.tagline),
+  xUrl: env("NEXT_PUBLIC_X_URL", PROTOCOL.x),
+  discordUrl: env("NEXT_PUBLIC_DISCORD_URL", PROTOCOL.discord),
   ponsUrl: env("NEXT_PUBLIC_PONS_URL"),
   ponsId: env("NEXT_PUBLIC_PONS_ID"),
 };
