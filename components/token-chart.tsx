@@ -47,13 +47,11 @@ export function TokenChart({
       topColor: `${color}55`,
       bottomColor: `${color}08`,
       lineWidth: 2,
+      priceFormat: { type: "price", precision: 8, minMove: 0.00000001 },
     });
     chart.current = c;
     series.current = s;
-    const ro = new ResizeObserver(() => c.applyOptions({ width: el.clientWidth, height: el.clientHeight }));
-    ro.observe(el);
     return () => {
-      ro.disconnect();
       c.remove();
       chart.current = null;
       series.current = null;
