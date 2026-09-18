@@ -13,11 +13,10 @@ const connectors = [
           projectId: wallet.projectId,
           showQrModal: true,
           metadata: {
-            name: "Helix",
-            description:
-              "Liquidity stakes and concentrated liquidity pools on Robinhood Chain.",
+            name: "Helix.fun",
+            description: "Meme token launchpad on Robinhood Chain.",
             url: "https://newdexx.vercel.app",
-            icons: ["https://newdexx.vercel.app/logo.jpg"],
+            icons: ["https://newdexx.vercel.app/icon.svg"],
           },
         }),
       ]

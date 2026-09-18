@@ -96,6 +96,23 @@ export function fakeEvm(seed: string): string {
   return `0x${h}${h2}${h3}${h4}${h5}`.slice(0, 42);
 }
 
+export function formatEth(n: number, digits = 4): string {
+  if (!Number.isFinite(n) || n === 0) return "0 ETH";
+  if (Math.abs(n) < 0.0001) return "<0.0001 ETH";
+  if (Math.abs(n) < 1) return `${n.toFixed(digits)} ETH`;
+  return `${n.toLocaleString("en-US", { maximumFractionDigits: 3 })} ETH`;
+}
+
+export function relativeTime(ts: number): string {
+  const s = Math.max(1, Math.round((Date.now() - ts) / 1000));
+  if (s < 60) return `${s}s`;
+  const m = Math.round(s / 60);
+  if (m < 60) return `${m}m`;
+  const h = Math.round(m / 60);
+  if (h < 48) return `${h}h`;
+  return `${Math.round(h / 24)}d`;
+}
+
 export function fakeSol(seed: string): string {
   const alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
   let h = hashSeed(seed);

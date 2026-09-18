@@ -1,70 +1,80 @@
-export type ChainId = "robinhood" | "sol";
-export type QuoteRh = "ETH" | "USDG";
-export type QuoteSol = "SOL" | "USDC";
-export type Quote = QuoteRh | QuoteSol;
-export type Timeframe = "1h" | "24h" | "7d";
-export type ListKind = "trending" | "established";
-export type ShapeId = "uniform" | "concentrated" | "wide";
-
-export type Token = {
+export type StoredToken = {
   id: string;
-  chain: ChainId;
-  symbol: string;
-  name: string;
-  quote: Quote;
-  mc: number;
-  change24h: number;
-  fees24h: number | null;
-  trades24h: number;
-  vol24h: number;
-  ageHours: number;
-  featured?: boolean;
-  lists: ListKind[];
   address: string;
-  logo?: string;
-  priceUsd?: number;
-};
-
-export type LiveToken = {
-  symbol: string;
+  curveAddress: string;
+  pairAddress?: string;
   name: string;
-  address: string;
+  symbol: string;
+  description: string;
   logo: string;
-  mc: number;
-  change24h: number;
-  vol24h: number;
-  trades24h: number;
-  fees24h: number | null;
-  ageHours: number;
+  twitter: string;
+  telegram: string;
+  website: string;
+  creator: string;
+  createdAt: number;
+  realEth: string;
+  tokenReserve: string;
+  totalSupply: string;
+  graduated: boolean;
+  graduatedAt?: number;
+  ammEth: string;
+  ammToken: string;
+  volumeEth: string;
+  txCount: number;
+  lastTradeAt: number;
+  featured?: boolean;
+};
+
+export type StoredTrade = {
+  id: string;
+  tokenId: string;
+  trader: string;
+  isBuy: boolean;
+  ethAmount: string;
+  tokenAmount: string;
+  fee: string;
   priceUsd: number;
+  marketCapUsd: number;
+  ts: number;
+  txHash?: string;
 };
 
-export type Stake = {
+export type StoredComment = {
   id: string;
-  chain: ChainId;
   tokenId: string;
-  tvlQuote: number;
-  rate7d: number | null;
-  fees24h: number;
-};
-
-export type Position = {
-  id: string;
-  chain: ChainId;
-  tokenId: string;
-  shape: ShapeId;
-  depositedUsd: number;
-  valueUsd: number;
-  feesUsd: number;
-  rangeMin: number;
-  rangeMax: number;
+  user: string;
+  text: string;
   createdAt: number;
 };
 
-export type StakeDeposit = {
-  id: string;
-  chain: ChainId;
-  stakeId: string;
-  amountQuote: number;
-  createdAt: number;
+export type StoredHolder = {
+  address: string;
+  balance: string;
+};
+
+export type LaunchpadStore = {
+  tokens: StoredToken[];
+  trades: StoredTrade[];
+  comments: StoredComment[];
+  /** tokenId -> trader -> token wei */
+  balances: Record<string, Record<string, string>>;
+  lastBlock?: number;
+};
+
+export type TokenView = StoredToken & {
+  marketCapUsd: number;
+  priceUsd: number;
+  progressBps: number;
+  change24h: number;
+  volume24hUsd: number;
+  replies: number;
+  holders: number;
+  ageHours: number;
+  king?: boolean;
+};
+
+export type ProfileView = {
+  address: string;
+  created: TokenView[];
+  held: { token: TokenView; balance: string; valueUsd: number }[];
 };

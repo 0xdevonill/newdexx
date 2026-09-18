@@ -35,10 +35,10 @@ function errorMessage(err: unknown): string {
 }
 
 export function WalletButton() {
-  const { wallet, connect, disconnect, setWallet, chain, pushToast } = useAppState();
+  const { wallet, connect, disconnect, setWallet, pushToast } = useAppState();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
-  const live = walletEnv.live && chain === "robinhood";
+  const live = walletEnv.live;
   const { address, isConnected, chainId } = useAccount();
   const { connectAsync, connectors } = useConnect();
   const { disconnectAsync } = useDisconnect();
@@ -54,10 +54,7 @@ export function WalletButton() {
   });
 
   const shown = live && isConnected && address ? address : wallet;
-  const wallets =
-    chain === "sol"
-      ? ["Phantom", "Solflare", "WalletConnect"]
-      : ["MetaMask", "Rabby", "WalletConnect"];
+  const wallets = ["MetaMask", "Rabby", "WalletConnect"];
 
   const pickConnector = (kind: string) => {
     const k = kind.toLowerCase();
@@ -95,10 +92,7 @@ export function WalletButton() {
     if (!live) {
       connect(kind);
       setOpen(false);
-      pushToast(
-        "Wallet connected",
-        `${kind} on ${chain === "sol" ? "Solana" : "Robinhood Chain"}`
-      );
+      pushToast("Wallet connected", `${kind} · Robinhood Chain demo`);
       return;
     }
     if (kind === "WalletConnect" && !walletEnv.projectId) {
@@ -149,10 +143,7 @@ export function WalletButton() {
         onClick={() => {
           if (wrongNetwork) {
             void switchChainAsync({ chainId: ROBINHOOD_CHAIN_ID }).catch(() => {
-              pushToast(
-                "Switch to Robinhood Chain",
-                "Approve network 4663 in your wallet."
-              );
+              pushToast("Switch to Robinhood Chain", "Approve network 4663 in your wallet.");
             });
             return;
           }
@@ -177,8 +168,8 @@ export function WalletButton() {
           <DialogHeader>
             <DialogTitle>Connect a wallet</DialogTitle>
             <DialogDescription>
-              Helix never asks for a seed phrase or private key. Approve the
-              connection in your wallet, then you are in.
+              Helix.fun never asks for a seed phrase. Approve the connection, then we switch you to
+              Robinhood Chain (4663).
             </DialogDescription>
           </DialogHeader>
           <div className="wallet-list">
@@ -197,10 +188,8 @@ export function WalletButton() {
           </div>
           <p className="wallet-note">
             {live
-              ? "Live mode: connects to Robinhood Chain mainnet (chain id 4663). Positions and stakes in this demo stay in the browser."
-              : chain === "sol"
-                ? "Solana connect is a local demo. Use the Robinhood toggle plus NEXT_PUBLIC_WALLET_API for a live EVM connection."
-                : "Demo mode until NEXT_PUBLIC_WALLET_API is set. Then Connect uses your real wallet on Robinhood Chain mainnet."}
+              ? "Live mode: MetaMask, Rabby, or WalletConnect on Robinhood Chain mainnet (chain id 4663)."
+              : "Demo mode until NEXT_PUBLIC_WALLET_API is set. Connect still gives you an address so you can launch and trade locally."}
           </p>
         </DialogContent>
       </Dialog>

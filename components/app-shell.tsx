@@ -1,6 +1,7 @@
 "use client";
 
 import { Background } from "@/components/background";
+import { NetworkBanner } from "@/components/network-banner";
 import { Siderail } from "@/components/siderail";
 import { Topbar } from "@/components/topbar";
 import { useAppState } from "@/lib/app-state";
@@ -13,7 +14,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <Topbar />
       <Siderail />
       <div className="app-rail-shift">
-        <main className="shell-main">{children}</main>
+        <main className="shell-main">
+          <NetworkBanner />
+          {children}
+        </main>
       </div>
       <div className="toast-stack" aria-live="polite">
         {toasts.map((t) => (
