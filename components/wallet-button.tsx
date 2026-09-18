@@ -20,6 +20,7 @@ import { useAppState } from "@/lib/app-state";
 import { shortAddr } from "@/lib/format";
 import { ROBINHOOD_CHAIN_ID } from "@/lib/robinhood-chain";
 import { wallet as walletEnv } from "@/lib/site";
+import { PROTOCOL } from "@/lib/tokens";
 
 function errorMessage(err: unknown): string {
   if (!err || typeof err !== "object") return "Wallet request failed.";
@@ -177,7 +178,7 @@ export function WalletButton() {
           <DialogHeader>
             <DialogTitle>Connect a wallet</DialogTitle>
             <DialogDescription>
-              Helix never asks for a seed phrase or private key. Approve the
+              {PROTOCOL.name} never asks for a seed phrase or private key. Approve the
               connection in your wallet, then you are in.
             </DialogDescription>
           </DialogHeader>
@@ -199,8 +200,8 @@ export function WalletButton() {
             {live
               ? "Live mode: connects to Robinhood Chain mainnet (chain id 4663). Positions and stakes in this demo stay in the browser."
               : chain === "sol"
-                ? "Solana connect is a local demo. Use the Robinhood toggle plus NEXT_PUBLIC_WALLET_API for a live EVM connection."
-                : "Demo mode until NEXT_PUBLIC_WALLET_API is set. Then Connect uses your real wallet on Robinhood Chain mainnet."}
+                ? "Solana connect is a local demo. Switch to Robinhood for a live EVM wallet connection."
+                : "Demo mode until a WalletConnect Project ID is set."}
           </p>
         </DialogContent>
       </Dialog>

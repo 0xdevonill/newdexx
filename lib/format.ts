@@ -21,7 +21,7 @@ export function sparkline(seed: string, n = 24): number[] {
 }
 
 export function tokenHue(symbol: string): number {
-  if (symbol === "HELIX") return 152;
+  if (symbol === "PING" || symbol === "HELIX") return 145;
   return hashSeed(symbol) % 360;
 }
 

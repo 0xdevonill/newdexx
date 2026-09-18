@@ -1,153 +1,358 @@
 import Link from "next/link";
+import { BRAND } from "@/lib/brand";
+import { PROTOCOL } from "@/lib/tokens";
 
 export const metadata = {
-  title: "Helix Docs",
-  description:
-    "Provide liquidity, earn real fees, and grow the markets you already trade — on Robinhood Chain and Solana.",
+  title: `${PROTOCOL.name} plan`,
+  description: `Written brand, site, utility, and Pons launch plan for ${PROTOCOL.name} ($${PROTOCOL.token}) on Robinhood Chain.`,
 };
 
 export default function DocsPage() {
+  const token = PROTOCOL.token;
+  const name = PROTOCOL.name;
+
   return (
     <article className="docs-page">
       <p className="tok-name" style={{ letterSpacing: "0.16em", textTransform: "uppercase" }}>
-        Helix Docs
+        {name} · written plan
       </p>
-      <h1>Put your money to work: provide liquidity, earn real fees, and grow the ecosystem you are already using.</h1>
+      <h1>
+        {name} (${token}) — FOMO-style token, site system, and full work plan for Robinhood
+        Chain.
+      </h1>
       <p>
-        Helix makes providing liquidity easy. Full customization, detailed tracking, and every
-        fee traced back to what you put in. No wallet access, no lockups, nothing to trust but
-        the contract.
+        This page is the operating document. The landing is the pitch. Pools and Stakes are the
+        product. Nothing here claims to be Robinhood, HOOD stock, or an official chain token.
       </p>
 
-      <h3>What is LPing?</h3>
-      <p>
-        LPing, short for liquidity providing, means depositing tokens into a pool so other
-        people have something to trade against. Every swap through that pool pays a fee, and
-        liquidity providers split it, sized to what they put in.
-      </p>
-      <p>That is the core mechanism. Everything else on this page is detail on top of it.</p>
-
-      <h3>Why liquidity matters</h3>
-      <p>
-        Every new token needs a market before it needs anything else. More tokens launch every
-        day, across more chains, and each one needs people willing to sit on both sides of a
-        trade so buyers and sellers can actually meet.
-      </p>
-      <p>
-        That is what LPs do. Not a side character in DeFi — the infrastructure everything else
-        sits on top of. A token with no liquidity is a token nobody can actually trade, no
-        matter how good the launch behind it.
-      </p>
-      <p>Helix exists for the people doing that work. On Robinhood Chain, and on Solana.</p>
-
-      <div className="docs-grid">
-        <div className="doc-card">
-          <h4>Price stability</h4>
-          <p>More liquidity means less price impact per trade.</p>
-        </div>
-        <div className="doc-card">
-          <h4>Execution</h4>
-          <p>Bigger orders fill without getting wrecked by slippage.</p>
-        </div>
-        <div className="doc-card">
-          <h4>Market health</h4>
-          <p>Liquid markets recover faster from shocks.</p>
-        </div>
-        <div className="doc-card">
-          <h4>Trading strategy</h4>
-          <p>Knowing where liquidity sits helps you time entries and exits.</p>
-        </div>
+      <div className="bn-summary">
+        <h2>বাংলায় সংক্ষেপ</h2>
+        <p>
+          <b>নাম:</b> {name} &nbsp;|&nbsp; <b>টিকার:</b> ${token} &nbsp;|&nbsp;{" "}
+          <b>চেইন:</b> Robinhood Chain (4663) &nbsp;|&nbsp; <b>লঞ্চ:</b> Pons-এ ফেয়ার লঞ্চ।
+        </p>
+        <p>
+          <b>ইউনিক আইডিয়া:</b> এই চেইনে অফিসিয়াল নেটওয়ার্ক টোকেন নেই। প্রতিটা ভাইরাল মুভ একটা
+          নোটিফিকেশন দিয়ে শুরু হয় — একটা পিং। ${token} সেই সাউন্ড। FOMO নামেই আছে, কিন্তু দাবি
+          অফিসিয়াল লিস্টিং নয়।
+        </p>
+        <p>
+          <b>ইউটিলিটি:</b> পুলে লিকুইডিটি / স্টেক রাখলে অন্যরা FOMO-তে কিনলে সোয়াপ ফি আসে। ৯২.৫%
+          LP/স্টেকারদের। ৭.৫% শুধু ক্লেইম করা ফি থেকে। লকআপ নেই। সিড ফ্রেজ কখনো চাইবে না।
+        </p>
+        <p>
+          <b>কাজের ধাপ:</b> (০) সাইট ও ব্র্যান্ড লাইভ — এটাই এই ডিপ্লয়মেন্ট। (১) এই আর্টওয়ার্ক
+          দিয়ে Pons-এ টোকেন তৈরি। (২) কন্ট্রাক্ট অ্যাড্রেস বসিয়ে Redeploy। (৩) পুল সিড + স্টেক।
+          (৪) মিম + ইউটিলিটি ক্লিপ — কখনো নকল Robinhood নিউজ না।
+        </p>
+        <p>
+          <b>যা করব না:</b> অফিসিয়াল রবিনহুড প্রোডাক্ট বলে চালিয়ে দেওয়া, ফেক ভলিউম, সিড ফ্রেজ
+          চাওয়া, লিস্টিং গ্যারান্টি। ক্রিপ্টো রিস্কি। এটা ফাইন্যান্সিয়াল অ্যাডভাইস নয়।
+        </p>
       </div>
 
-      <h3>Why Helix</h3>
+      <h2>1. Token identity</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Name</td>
+            <td>{name}</td>
+          </tr>
+          <tr>
+            <td>Ticker</td>
+            <td>${token}</td>
+          </tr>
+          <tr>
+            <td>Tagline</td>
+            <td>{BRAND.tagline}</td>
+          </tr>
+          <tr>
+            <td>Network</td>
+            <td>Robinhood Chain · chain id 4663 · gas in ETH</td>
+          </tr>
+          <tr>
+            <td>Launch pad</td>
+            <td>Pons (standard 1B supply fair launch)</td>
+          </tr>
+          <tr>
+            <td>Mark</td>
+            <td>Neon radar ping + notification spark on void black (`/logo.png`)</td>
+          </tr>
+          <tr>
+            <td>Positioning</td>
+            <td>Community meme with LP fee-share. Explicitly unofficial.</td>
+          </tr>
+        </tbody>
+      </table>
       <p>
-        Helix exists because managing LP positions on most platforms is tedious and not user
-        friendly. Everything here is built to remove that friction, by liquidity providers who
-        have felt it firsthand.
+        Why this name can travel: four letters, a sound you already know, and a joke that
+        fits the chain. Cash Cat won because it was an insider name. ${token} wins if it
+        becomes the insider <i>sound</i> — the alert that means “look at the chart.” It is not
+        $HOOD. It is not a claim that Robinhood issued a coin. Robinhood Chain has no native
+        token; ETH pays gas. Say that out loud in every pin.
+      </p>
+
+      <h3>Lore, one paragraph</h3>
+      <p>
+        The market never sleeps on this L2. Stock tokens print 24/7. Pons spawns a new ticker
+        every few seconds. Nobody can watch all of it, so everyone waits for a ping — a
+        screenshot, a group chat, a candle that should not exist. {name} is that ping. If you
+        heard it, you are not late. If you only heard about it, you already are. The honest
+        version of FOMO: urgency in the brand, truth in the docs.
+      </p>
+
+      <h2>2. Visual system</h2>
+      <p>
+        Pons timelines are a blur of dogs and wordmarks. ${token} should be recognizable at
+        32px and at full-bleed. One motion. One color. No feather logo, no Robinhood wordmark.
       </p>
       <div className="docs-grid">
         <div className="doc-card">
-          <h4>Built for LPs, by LPs</h4>
+          <h4>Signal green</h4>
           <p>
-            The team uses Helix daily to manage its own positions. Every feature exists because
-            we needed it ourselves, not because it looked good in a deck.
+            <code>#00FF87</code> on <code>#050806</code>. Close to “up only,” distinct from
+            Robinhood’s <code>#00C805</code> feather. Never use their bird.
           </p>
         </div>
         <div className="doc-card">
-          <h4>Earn money by providing liquidity</h4>
+          <h4>Alert gold</h4>
           <p>
-            Deposit into a pool, traders pay to swap against it, and your share streams to you
-            automatically. That is the entire earn loop.
+            <code>#FFE14A</code> for the ticker, countdown, and marquee dots — the color of a
+            notification badge, not a yield promise.
+          </p>
+        </div>
+        <div className="doc-card">
+          <h4>Type</h4>
+          <p>
+            Anton for the FOMO / PING poster. Space Grotesk for titles. Inter for reading.
+            JetBrains Mono for tickers, stats, and buttons.
+          </p>
+        </div>
+        <div className="doc-card">
+          <h4>Motion</h4>
+          <p>
+            Expanding rings, a live marquee, occasional canvas pings. No fake buy tape. No
+            invented holder count.
           </p>
         </div>
       </div>
-
-      <h3>Two core mechanics</h3>
-      <p>Helix has two halves that feed each other. Neither depends on the other to work.</p>
-      <div className="docs-grid">
-        <div className="doc-card">
-          <h4>Stakes</h4>
-          <p>Put liquidity into a token pool and collect a share of the fees traders pay on it.</p>
-        </div>
-        <div className="doc-card">
-          <h4>Pools</h4>
-          <p>Build a shaped position from a single coin and manage it from one page.</p>
-        </div>
-      </div>
-      <p>Based on Robinhood Chain and Solana fees from real trading.</p>
-
-      <h2>Getting Started</h2>
       <p>
-        Everything you need before your first deposit: a wallet, a little gas, and five minutes.
-      </p>
-      <h3>Connecting your wallet</h3>
-      <p>
-        On Robinhood Chain, Helix connects through any standard EVM wallet on{" "}
-        <b>Robinhood Chain mainnet (chain id 4663)</b>. MetaMask and Rabby cover
-        most people; anything that supports WalletConnect works too. Set{" "}
-        <code>NEXT_PUBLIC_WALLET_API</code> to your Reown / WalletConnect Project
-        ID (or a Robinhood RPC URL) so Connect talks to the live chain. On Solana, use
-        Phantom or Solflare. Click <b>Connect Wallet</b> top right, approve the connection in
-        your wallet, you are in.
-      </p>
-      <p>
-        Helix never asks for a seed phrase or private key, in the app or anywhere else. If
-        something asks, it is not Helix.
-      </p>
-      <h3>Gas: what you need before you start</h3>
-      <p>
-        Every action on Helix — depositing, claiming, withdrawing — is a transaction, and every
-        transaction costs a small amount of gas. On Robinhood Chain that is paid in ETH. On
-        Solana it is paid in SOL. Keep a bit sitting in your wallet before you do anything else,
-        on top of whatever you are depositing.
-      </p>
-      <p>
-        Fees run well below Ethereum mainnet, but they are not zero. If a transaction fails or
-        will not confirm, check your gas token first — it is the most common cause.
-      </p>
-      <p>
-        From here: <Link href="/pools">Pools</Link> if you want to pick your own token and
-        range, or <Link href="/stakes">Stakes</Link> if you would rather deposit into an
-        existing one and let it run.
+        Buttons that spend money or open Pons are lime on black with a green glow (
+        <code>.btn-ping</code>). Secondary actions stay ghost. Light mode exists but the
+        default is night — FOMO reads at 2am.
       </p>
 
-      <h2>Stakes</h2>
+      <h2>3. Website map</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Route</th>
+            <th>Job</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <Link href="/">/</Link>
+            </td>
+            <td>FOMO landing. Idea, utility loop, work map, disclaimer. Share this URL.</td>
+          </tr>
+          <tr>
+            <td>
+              <Link href="/pools">/pools</Link>
+            </td>
+            <td>Token book on Robinhood Chain and Solana. Featured row is ${token}.</td>
+          </tr>
+          <tr>
+            <td>/pools/[id]</td>
+            <td>Chart, stats, shaped LP mint from a single coin.</td>
+          </tr>
+          <tr>
+            <td>
+              <Link href="/stakes">/stakes</Link>
+            </td>
+            <td>Fee-share deposits. This is the utility, not a sidebar.</td>
+          </tr>
+          <tr>
+            <td>
+              <Link href="/positions">/positions</Link>
+            </td>
+            <td>Your mints and stakes after connect. 7.5% only on claimed fees.</td>
+          </tr>
+          <tr>
+            <td>
+              <Link href="/academy">/academy</Link>
+            </td>
+            <td>Short lessons. Pitch then practice.</td>
+          </tr>
+          <tr>
+            <td>
+              <Link href="/docs">/docs</Link>
+            </td>
+            <td>This plan plus LP mechanics.</td>
+          </tr>
+        </tbody>
+      </table>
       <p>
-        A stake is attached to one token pool. Everyone who deposits owns a proportional slice,
-        and rewards are split by that slice for as long as you stay in.
+        After you create the token, set <code>NEXT_PUBLIC_TOKEN_CONTRACT</code> and{" "}
+        <code>NEXT_PUBLIC_PONS_URL</code>, then Redeploy. Name, ticker, on-chain logo, and USD
+        price load from DexScreener / GeckoTerminal. Optional{" "}
+        <code>NEXT_PUBLIC_LAUNCH_AT</code> (ISO time) turns on an honest countdown. If it is
+        unset, there is no fake clock.
       </p>
+
+      <h2>4. Work plan</h2>
       <div className="steps">
+        <div className="step">
+          <div className="step-n">0</div>
+          <div>
+            <b>Brand and site (done in this deploy)</b>
+            <p>
+              Lock name, ticker, mark, palette, landing, docs, pools, stakes. Pin the
+              disclaimer. Do not launch on Pons until this URL is shareable on mobile.
+            </p>
+          </div>
+        </div>
         <div className="step">
           <div className="step-n">1</div>
           <div>
-            <b>Pick a stake</b>
-            <p>Choose one coin or the quote asset & token at the current pool ratio.</p>
+            <b>Social shells</b>
+            <p>
+              Claim X and Discord with the same mark. Bio: “Community meme on Robinhood Chain.
+              Not official. Fair launch on Pons.” Pin this site. Never a seed-phrase form.
+            </p>
           </div>
         </div>
         <div className="step">
           <div className="step-n">2</div>
           <div>
-            <b>Helix builds it</b>
+            <b>Fair launch on Pons</b>
+            <p>
+              Create ${token} with `/logo.png` (or the same art on IPFS). Standard Pons supply.
+              No stealth “dev wallet” story. Copy the contract. Paste into Vercel env. Redeploy.
+              The Buy button lights up from <code>NEXT_PUBLIC_PONS_URL</code>.
+            </p>
+          </div>
+        </div>
+        <div className="step">
+          <div className="step-n">3</div>
+          <div>
+            <b>Liquidity that matches the lore</b>
+            <p>
+              Seed the ${token} book. Point the landing CTA at Pons and the secondary CTA at
+              Stakes. Record one 15-second clip: buy happens → fee → staker share. That clip is
+              the utility, not a whitepaper.
+            </p>
+          </div>
+        </div>
+        <div className="step">
+          <div className="step-n">4</div>
+          <div>
+            <b>Content, still honest</b>
+            <p>
+              Memes: radar, notification badge, “did you hear that.” Reply-guys with the site,
+              not a screenshot of a made-up MC. If volume is quiet, say the pool is quiet.
+              Silence beats a fake tape.
+            </p>
+          </div>
+        </div>
+        <div className="step">
+          <div className="step-n">5</div>
+          <div>
+            <b>Wallet connect, then real LP txs</b>
+            <p>
+              Set <code>NEXT_PUBLIC_WALLET_API</code> to a Reown / WalletConnect project id so
+              Connect hits Robinhood Chain mainnet. Mint / deposit in this UI still do not send
+              mainnet LP transactions until the vault contracts are wired. Do not pretend they
+              do.
+            </p>
+          </div>
+        </div>
+        <div className="step">
+          <div className="step-n">6</div>
+          <div>
+            <b>Optional Solana mirror</b>
+            <p>
+              Same ticker, same art, <code>NEXT_PUBLIC_TOKEN_CONTRACT_SOL</code>. Only if the
+              Robinhood book already has a pulse. Two empty charts is worse than one.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Pons-day checklist</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Before</th>
+            <th>During</th>
+            <th>After</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Site live on phone. Discord + X pinned. Art exported 1:1.</td>
+            <td>Create token. Paste contract. Redeploy. First posts are the site + Pons link.</td>
+            <td>Seed LP. Post the fee-share clip. Update docs with the live address.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>What we will not do</h3>
+      <p>
+        No “official Robinhood Chain token.” No fake listing in the Robinhood app. No
+        guaranteed returns. No wash volume. No impersonating Robinhood support. No asking for a
+        seed phrase. If a tactic needs a lie to work, it is not this project.
+      </p>
+
+      <h2>5. Utility (how the pool pays you)</h2>
+      <p>
+        FOMO without a loop dies in a day. The loop here is old DeFi, said in ping language:
+        traders pay a swap fee, LPs split it. {name} does not mint rewards. It streams a share
+        of fees that already exist.
+      </p>
+      <div className="docs-grid">
+        <div className="doc-card">
+          <h4>Stakes</h4>
+          <p>Deposit into a token pool and collect a proportional share of its swap fees.</p>
+        </div>
+        <div className="doc-card">
+          <h4>Pools</h4>
+          <p>Build a shaped concentrated position from a single coin and manage it on one page.</p>
+        </div>
+      </div>
+
+      <h3>Connecting</h3>
+      <p>
+        Robinhood Chain is EVM, chain id <code>4663</code>. MetaMask, Rabby, or WalletConnect.
+        Solana uses Phantom or Solflare. {name} never asks for a seed phrase. If something
+        does, it is not this site.
+      </p>
+      <p>
+        Gas is ETH on Robinhood Chain and SOL on Solana. Keep a little extra for failed
+        retries. Robinhood has at times sponsored gas inside its own wallet; that is their
+        program, not ours, and it is not a reason to call ${token} “official.”
+      </p>
+
+      <h3>Stakes flow</h3>
+      <div className="steps">
+        <div className="step">
+          <div className="step-n">1</div>
+          <div>
+            <b>Pick a stake</b>
+            <p>One coin, or quote & token at the current pool ratio.</p>
+          </div>
+        </div>
+        <div className="step">
+          <div className="step-n">2</div>
+          <div>
+            <b>The app builds it</b>
             <p>You never handle LP tokens. Wallet asks once per step. Leftover is refunded.</p>
           </div>
         </div>
@@ -155,85 +360,26 @@ export default function DocsPage() {
           <div className="step-n">3</div>
           <div>
             <b>Staked automatically</b>
-            <p>Minted and staked for you in the same flow.</p>
+            <p>Minted and staked in the same flow. Time lock none. Exit penalty none.</p>
           </div>
         </div>
       </div>
-      <h3>Rewards</h3>
       <p>
-        Rewards accrue continuously and are paid in the quote asset — WETH on Robinhood Chain,
-        SOL on Solana — streamed out over a 7 day period rather than paid instantly, so a
-        single large fee event does not all land on whoever happens to be staked that minute.
-      </p>
-      <h3>Getting out</h3>
-      <p>
-        Withdraw unstakes your position and turns it back into coins, in proportion to what the
-        position holds. Nothing is sold on your behalf. Time lock none. Exit penalty none.
-      </p>
-      <h3>Creating a stake</h3>
-      <p>
-        Anyone can create a stake for a token that already has a quote-asset pool. Helix finds
-        the pool automatically. One stake per pool through the interface, so stakers are not
-        split across duplicates.
+        Rewards accrue continuously in the quote asset — WETH on Robinhood Chain, SOL on Solana
+        — streamed over 7 days so one fat fee event does not all land on whoever is staked that
+        minute. Withdraw unstakes and returns coins in proportion. Nothing is sold for you.
       </p>
 
-      <h2>Pools</h2>
+      <h3>Pools</h3>
       <p>
-        Find the token, read its chart, choose a shape, and mint. Every position is minted into
-        a Helix contract that holds the position NFT. Only you have access to it. The Helix
-        team cannot see or touch what you do with it.
-      </p>
-      <p>
-        <b>Trending</b> ranks tokens whose volume is surging right now, hottest at the top.{" "}
-        <b>Established</b> ranks the biggest caps that still trade.
-      </p>
-      <h3>Shapes</h3>
-      <p>
-        A position is a price range split into bins. The shape decides how your deposit spreads
-        across them. Drag the min and max in your head, then commit: a narrow range concentrates
-        capital and earns more per dollar while price stays inside it; a wide range earns less
-        per dollar but needs less attention.
+        Find the token, read the chart, choose a shape, mint. The position NFT sits in a
+        contract only your wallet controls. <b>Trending</b> is heat. <b>Established</b> is size.
+        A tight range earns more while price stays inside it. A wide range earns less per
+        dollar and needs less babysitting.
       </p>
 
-      <h2>Fees</h2>
-      <p>Helix takes 7.5% of the fees you claim.</p>
-      <div className="steps">
-        <div className="step">
-          <div className="step-n">1</div>
-          <div>
-            <b>Trade happens</b>
-            <p>Someone swaps through the pool.</p>
-          </div>
-        </div>
-        <div className="step">
-          <div className="step-n">2</div>
-          <div>
-            <b>Fee collected</b>
-            <p>The pool&apos;s own swap fee.</p>
-          </div>
-        </div>
-        <div className="step">
-          <div className="step-n">3</div>
-          <div>
-            <b>Split</b>
-            <p>92.5% to stakers / LPs. 7.5% to Helix.</p>
-          </div>
-        </div>
-        <div className="step">
-          <div className="step-n">4</div>
-          <div>
-            <b>Streamed to you</b>
-            <p>Over 7 days, so no one fee event lands on one staker.</p>
-          </div>
-        </div>
-        <div className="step">
-          <div className="step-n">5</div>
-          <div>
-            <b>Claim</b>
-            <p>No further cut. Compounding is not live yet — claim and redeposit.</p>
-          </div>
-        </div>
-      </div>
+      <h3>Fees</h3>
+      <p>{name} takes 7.5% of the fees you claim, never of principal.</p>
       <table>
         <thead>
           <tr>
@@ -249,33 +395,17 @@ export default function DocsPage() {
             <td>Taken once, never from your deposit.</td>
           </tr>
           <tr>
-            <td>Claim</td>
+            <td>Deposit / withdraw / create stake</td>
             <td>0</td>
-            <td>Nothing further, the cut above is already applied.</td>
-          </tr>
-          <tr>
-            <td>Deposit</td>
-            <td>0</td>
-            <td>Pool&apos;s own swap fee still applies if one side is swapped.</td>
-          </tr>
-          <tr>
-            <td>Withdraw</td>
-            <td>0</td>
-            <td>No exit fee, no lockup.</td>
-          </tr>
-          <tr>
-            <td>Creating a stake</td>
-            <td>0</td>
-            <td>Zero on this deployment. Gas only.</td>
+            <td>Gas only. Pool swap fee still applies if one side is swapped.</td>
           </tr>
         </tbody>
       </table>
 
-      <h2>Chains</h2>
+      <h2>6. Chains</h2>
       <p>
-        Helix runs on <b>Robinhood Chain</b> (chain id <code>4663</code>) and <b>Solana</b>.
-        Switch chains from the top bar. Robinhood Chain is EVM; Solana is not. HELIX is the
-        protocol token on both. This is not an official Robinhood product.
+        {name} is built for <b>Robinhood Chain</b> first. Solana is a switch in the top bar,
+        not the story. This is not an official Robinhood product.
       </p>
       <table>
         <thead>
@@ -302,43 +432,53 @@ export default function DocsPage() {
         </tbody>
       </table>
 
-      <h2>Contracts</h2>
+      <h2>7. Contracts and env</h2>
       <p>
-        Live on Robinhood Chain, chain id <code>4663</code>, and on Solana. Individual stakes
-        are created by users, so their addresses are not fixed.
+        Live addresses are filled after Pons create + vault deploy. Until then the featured
+        book uses demo data with {name} branding.
       </p>
       <table>
         <thead>
           <tr>
-            <th>Contract</th>
-            <th>What it does</th>
+            <th>Piece</th>
+            <th>Job</th>
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td>Pons token</td>
+            <td>${token} ERC-20 from the launchpad. Set NEXT_PUBLIC_TOKEN_CONTRACT.</td>
+          </tr>
           <tr>
             <td>VaultFactory</td>
             <td>Creates stakes. One per pool.</td>
           </tr>
           <tr>
             <td>VaultFarmFactory</td>
-            <td>Attaches the reward stream to a stake.</td>
+            <td>Attaches the 7-day reward stream.</td>
           </tr>
           <tr>
-            <td>HelixZap</td>
+            <td>PingZap</td>
             <td>Turns a single coin into a balanced stake deposit.</td>
           </tr>
           <tr>
-            <td>HelixLadderManager</td>
-            <td>Holds the ladders you open and takes the 7.5% claim fee on fees collected.</td>
+            <td>PingLadderManager</td>
+            <td>Holds ladders and takes the 7.5% claim fee.</td>
           </tr>
           <tr>
-            <td>HelixPositionBuilder</td>
-            <td>Mints the concentrated liquidity positions for ladders.</td>
+            <td>PingPositionBuilder</td>
+            <td>Mints concentrated positions.</td>
           </tr>
         </tbody>
       </table>
+      <p>
+        Copy <code>.env.example</code>. Vercel bakes <code>NEXT_PUBLIC_</code> values at build
+        time, so change then Redeploy. WalletConnect project id makes Connect real on 4663;
+        empty keeps a local demo connect. Mint / deposit still do not broadcast mainnet LP txs
+        from this UI.
+      </p>
 
-      <h2>Glossary</h2>
+      <h2>8. Glossary</h2>
       <table>
         <thead>
           <tr>
@@ -348,50 +488,54 @@ export default function DocsPage() {
         </thead>
         <tbody>
           <tr>
-            <td>LP / LPing</td>
-            <td>Depositing tokens into a pool so other people have something to trade against.</td>
+            <td>${token}</td>
+            <td>Fomo Ping. The notification meme, not a Robinhood-issued asset.</td>
           </tr>
           <tr>
-            <td>Pool</td>
-            <td>A market where a token trades against another asset.</td>
+            <td>Ping</td>
+            <td>The brand motion and the moment a swap hits the pool.</td>
           </tr>
           <tr>
-            <td>Position</td>
-            <td>What lands after you deposit into a pool. Only you control it.</td>
+            <td>Pons</td>
+            <td>The Robinhood Chain launchpad. Fair launch lives there, not in a private mint.</td>
           </tr>
           <tr>
-            <td>Stake</td>
-            <td>A deposit attached to one token pool. Rewards split by share.</td>
-          </tr>
-          <tr>
-            <td>Shape</td>
-            <td>How your Pools deposit spreads across the bins in your chosen range.</td>
+            <td>LP / stake</td>
+            <td>Capital sitting in a pool so other people can trade. Fees split by share.</td>
           </tr>
           <tr>
             <td>Robinhood Chain</td>
-            <td>EVM chain Helix runs on, chain id 4663.</td>
-          </tr>
-          <tr>
-            <td>Solana</td>
-            <td>The second Helix deployment. Switch it from the top bar next to Robinhood.</td>
+            <td>Arbitrum Orbit L2, chain id 4663. ETH for gas. No official chain token.</td>
           </tr>
         </tbody>
       </table>
 
-      <h2>Frequently asked</h2>
-      <h3>Where do rewards actually come from?</h3>
+      <h2>9. FAQ</h2>
+      <h3>Is this the official Robinhood token?</h3>
       <p>
-        Every trade that goes through the pool pays a fee — the swap fee traders already pay.
-        Helix does not mint anything to fund your reward. It streams a share of that existing
-        fee to you.
+        No. Robinhood Chain uses ETH for gas. HOOD is Nasdaq-listed equity. {name} is a
+        community meme with an LP app wrapped around it.
+      </p>
+      <h3>Where do rewards come from?</h3>
+      <p>
+        Swap fees traders already pay. Nothing is inflated to bribe stakers. If nobody trades,
+        nobody earns. That is the honest FOMO loop.
       </p>
       <h3>Do I need to claim to keep earning?</h3>
-      <p>No. Rewards accrue whether or not you claim. Claiming just moves them to your wallet.</p>
+      <p>No. Rewards accrue either way. Claiming moves them to your wallet.</p>
       <h3>Can the team take my deposit?</h3>
       <p>
-        No. Deposits sit in the stake or ladder contract and only your own wallet can withdraw
-        them. The owner key can lower the fee and pause new deposits, but cannot raise the fee
-        or move a staked position.
+        No. Only your wallet can withdraw. The owner key can lower the fee and pause new
+        deposits. It cannot raise the fee or move a staked position.
+      </p>
+      <h3>Will ${token} be listed in the Robinhood app?</h3>
+      <p>
+        We will not say yes, maybe, or “working on it.” Listings are Robinhood’s decision.
+        Cash Cat got there because of their story, not because a landing page promised it.
+      </p>
+
+      <p style={{ marginTop: "2rem", color: "var(--text-3)", fontSize: 13 }}>
+        {BRAND.disclaimer}
       </p>
     </article>
   );

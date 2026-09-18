@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
   const upstream = await fetch(target.toString(), {
     headers: {
       Accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
-      "User-Agent": "Mozilla/5.0 HelixLiquidity/1.0",
+      "User-Agent": "Mozilla/5.0 FomoPing/1.0",
       Referer: `${target.origin}/`,
     },
     next: { revalidate: 86400 },

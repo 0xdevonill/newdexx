@@ -1,15 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Check, Copy } from "lucide-react";
 import { PriceChart } from "@/components/price-chart";
 import { TokenIcon } from "@/components/token-icon";
 import { useAppState } from "@/lib/app-state";
+import { parseTokenRouteId } from "@/lib/dex";
 import { formatAge, formatInt, formatPct, formatPrice, formatUsd, shortAddr } from "@/lib/format";
 import { PROTOCOL, quoteUnit } from "@/lib/tokens";
 import { useCatalog } from "@/lib/catalog";
-import type { ShapeId } from "@/lib/types";
+import type { ShapeId, Token } from "@/lib/types";
 
 const SHAPES: { id: ShapeId; label: string; hint: string }[] = [
   { id: "concentrated", label: "Concentrated", hint: "Tight band. Higher fee density while price stays inside." },
@@ -20,23 +21,59 @@ const SHAPES: { id: ShapeId; label: string; hint: string }[] = [
 export default function PoolDetailPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
-  const { wallet, addPosition, chain, pushToast } = useAppState();
+  const { wallet, addPosition, chain, setChain, pushToast, rememberToken } = useAppState();
   const { tokenById } = useCatalog();
-  const token = tokenById(params.id);
+  const catalogToken = tokenById(params.id);
+  const [remote, setRemote] = useState<{ id: string; token: Token | null } | null>(null);
   const [shape, setShape] = useState<ShapeId>("concentrated");
   const [amount, setAmount] = useState("250");
   const [copied, setCopied] = useState(false);
+  const parsed = parseTokenRouteId(params.id);
+
+  useEffect(() => {
+    if (catalogToken) return;
+    if (!parsed?.address) return;
+    const id = params.id;
+    let cancelled = false;
+    void fetch(
+      `/api/token?chain=${parsed.chain}&address=${encodeURIComponent(parsed.address)}`,
+      { cache: "no-store" }
+    )
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { token?: Token | null } | null) => {
+        if (cancelled) return;
+        if (data?.token) rememberToken(data.token);
+        setRemote({ id, token: data?.token ?? null });
+      })
+      .catch(() => {
+        if (!cancelled) setRemote({ id, token: null });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [catalogToken, params.id, parsed?.address, parsed?.chain, rememberToken]);
+
+  const token = catalogToken || (remote?.id === params.id ? remote.token : null);
+  const loadingToken = !catalogToken && Boolean(parsed?.address) && remote?.id !== params.id;
+
+  useEffect(() => {
+    if (token && token.chain !== chain) setChain(token.chain);
+  }, [token, chain, setChain]);
 
   const price = useMemo(() => {
     if (!token) return 0;
     return token.priceUsd && token.priceUsd > 0 ? token.priceUsd : token.mc / 1_000_000_000;
   }, [token]);
 
-  if (!token || token.chain !== chain) {
+  if (!token) {
     return (
       <div className="empty">
-        <h3>Pool not found</h3>
-        <p>This token is not listed on the selected chain.</p>
+        <h3>{loadingToken ? "Loading pool" : "Pool not found"}</h3>
+        <p>
+          {loadingToken
+            ? "Looking up this contract on the selected chain."
+            : "This token is not listed on the selected chain."}
+        </p>
         <button type="button" className="btn btn-ghost" onClick={() => router.push("/pools")}>
           Back to pools
         </button>
@@ -126,7 +163,7 @@ export default function PoolDetailPage() {
           </div>
           <p style={{ margin: 0, color: "var(--text-2)", fontSize: 14, lineHeight: 1.6 }}>
             {token.symbol}/{quote} · {token.quote} quote · age {formatAge(token.ageHours)} ·{" "}
-            {formatInt(token.trades24h)} trades in 24h. Helix finds every fee tier and defaults
+            {formatInt(token.trades24h)} trades in 24h. Fomo Ping finds every fee tier and defaults
             to the deepest book. A 7.5% cut is taken only when you claim fees, never from principal.
           </p>
         </div>
@@ -136,7 +173,7 @@ export default function PoolDetailPage() {
           <h3>Provide liquidity</h3>
         </div>
         <p style={{ margin: 0, color: "var(--text-2)", fontSize: 13.5, lineHeight: 1.55 }}>
-          Build a shaped position from a single coin. Helix mints the position NFT into a
+          Build a shaped position from a single coin. Fomo Ping mints the position NFT into a
           contract only your wallet controls.
         </p>
         <div className="field">

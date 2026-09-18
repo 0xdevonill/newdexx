@@ -9,7 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { ChainId, LiveToken, Position, ShapeId, StakeDeposit } from "@/lib/types";
+import type { ChainId, LiveToken, Position, ShapeId, StakeDeposit, Token } from "@/lib/types";
 import { fakeEvm, fakeSol } from "@/lib/format";
 import { wallet as walletEnv } from "@/lib/site";
 
@@ -28,6 +28,8 @@ type AppState = {
   disconnect: () => void;
   setWallet: (addr: string | null) => void;
   live: LiveToken | null;
+  foundTokens: Token[];
+  rememberToken: (token: Token) => void;
   positions: Position[];
   stakeDeposits: StakeDeposit[];
   addPosition: (input: {
@@ -51,11 +53,22 @@ const STAKE_KEY = "helix.stakes";
 const THEME_KEY = "helix.theme";
 const CHAIN_KEY = "helix.chain";
 const WALLET_KEY = "helix.wallet";
+const FOUND_KEY = "helix.found";
 
 function loadJson<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
     const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function loadSession<T>(key: string, fallback: T): T {
+  if (typeof window === "undefined") return fallback;
+  try {
+    const raw = sessionStorage.getItem(key);
     return raw ? (JSON.parse(raw) as T) : fallback;
   } catch {
     return fallback;
@@ -74,6 +87,7 @@ export function AppStateProvider({
   const [chain, setChainState] = useState<ChainId>("robinhood");
   const [wallet, setWallet] = useState<string | null>(null);
   const [live, setLive] = useState<LiveToken | null>(initialLive);
+  const [foundTokens, setFoundTokens] = useState<Token[]>([]);
   const [positions, setPositions] = useState<Position[]>([]);
   const [stakeDeposits, setStakeDeposits] = useState<StakeDeposit[]>([]);
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -89,6 +103,7 @@ export function AppStateProvider({
     if (!walletEnv.live) setWallet(w);
     setPositions(loadJson(POS_KEY, []));
     setStakeDeposits(loadJson(STAKE_KEY, []));
+    setFoundTokens(loadSession(FOUND_KEY, []));
     setReady(true);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
@@ -119,8 +134,8 @@ export function AppStateProvider({
 
   useEffect(() => {
     if (!ready) return;
-    localStorage.setItem(STAKE_KEY, JSON.stringify(stakeDeposits));
-  }, [stakeDeposits, ready]);
+    sessionStorage.setItem(FOUND_KEY, JSON.stringify(foundTokens.slice(0, 40)));
+  }, [foundTokens, ready]);
 
   useEffect(() => {
     let cancelled = false;
@@ -161,6 +176,17 @@ export function AppStateProvider({
     setWallet(addr);
   }, [chain]);
 
+  const rememberToken = useCallback((token: Token) => {
+    setFoundTokens((list) => {
+      const key = `${token.chain}:${token.address.toLowerCase()}`;
+      const next = [
+        token,
+        ...list.filter((t) => `${t.chain}:${t.address.toLowerCase()}` !== key),
+      ];
+      return next.slice(0, 40);
+    });
+  }, []);
+
   const disconnect = useCallback(() => setWallet(null), []);
 
   const setWalletAddress = useCallback((addr: string | null) => {
@@ -190,7 +216,7 @@ export function AppStateProvider({
         createdAt: Date.now(),
       };
       setPositions((p) => [pos, ...p]);
-      pushToast("Position minted", "Held in your Helix contract. Only your wallet can move it.");
+      pushToast("Position minted", "Held in your Ping contract. Only your wallet can move it.");
     },
     [chain, pushToast]
   );
@@ -240,6 +266,8 @@ export function AppStateProvider({
       disconnect,
       setWallet: setWalletAddress,
       live,
+      foundTokens,
+      rememberToken,
       positions,
       stakeDeposits,
       addPosition,
@@ -260,6 +288,8 @@ export function AppStateProvider({
       disconnect,
       setWalletAddress,
       live,
+      foundTokens,
+      rememberToken,
       positions,
       stakeDeposits,
       addPosition,

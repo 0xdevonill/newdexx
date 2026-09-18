@@ -14,7 +14,7 @@ import {
 import type { ChainId, Token } from "@/lib/types";
 
 export function useCatalog() {
-  const { live } = useAppState();
+  const { live, foundTokens } = useAppState();
 
   const tokensFor = useCallback(
     (chain: ChainId): Token[] => tokensForRaw(chain).map((t) => overlayLive(t, live)),
@@ -24,9 +24,16 @@ export function useCatalog() {
   const tokenById = useCallback(
     (id: string): Token | undefined => {
       const t = tokenByIdRaw(id);
-      return t ? overlayLive(t, live) : undefined;
+      if (t) return overlayLive(t, live);
+      const lower = id.toLowerCase();
+      return foundTokens.find(
+        (x) =>
+          x.id === id ||
+          x.address.toLowerCase() === lower ||
+          `${x.chain}-${x.address}`.toLowerCase() === lower
+      );
     },
-    [live]
+    [live, foundTokens]
   );
 
   const featuredToken = useCallback(

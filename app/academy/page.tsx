@@ -1,45 +1,46 @@
 import Link from "next/link";
+import { PROTOCOL } from "@/lib/tokens";
 
 export const metadata = {
-  title: "Helix Academy",
-  description: "Learn liquidity providing on Robinhood Chain and Solana, without the jargon wall.",
+  title: `${PROTOCOL.name} Academy`,
+  description: `Learn the ${PROTOCOL.token} ping, then provide liquidity on Robinhood Chain without the jargon wall.`,
 };
 
 const lessons = [
   {
     n: "01",
+    title: `Why $${PROTOCOL.token}`,
+    body: "The chain has no official token. The ping is the alert. Read the lore, then the disclaimer.",
+    href: "/",
+  },
+  {
+    n: "02",
     title: "Pools vs stakes",
     body: "A pool is a market. A stake is a share of that market’s fees. Start here if you only have five minutes.",
     href: "/docs",
   },
   {
-    n: "02",
+    n: "03",
     title: "Shapes and ranges",
     body: "Concentrated, uniform, wide — why a tight band earns more until price walks out of it.",
     href: "/docs",
   },
   {
-    n: "03",
+    n: "04",
     title: "Reading the tables",
     body: "Trending is heat. Established is size. Quote filters split ETH/USDG on Robinhood and SOL/USDC on Solana.",
     href: "/pools",
   },
   {
-    n: "04",
+    n: "05",
     title: "Fees without surprises",
     body: "7.5% on claimed trading fees. Zero on deposit, withdraw, and stake creation. Gas is extra.",
     href: "/docs",
   },
   {
-    n: "05",
-    title: "Robinhood and Solana",
-    body: "Same product, two chains. Switch with the marks in the top bar. HELIX is the protocol token on both.",
-    href: "/pools",
-  },
-  {
     n: "06",
     title: "Your first mint",
-    body: "Connect, pick HELIX, choose a shape, mint. Then watch it on Positions. Nothing is locked.",
+    body: `Connect, pick ${PROTOCOL.token}, choose a shape, mint. Then watch it on Positions. Nothing is locked.`,
     href: "/positions",
   },
 ];
@@ -51,11 +52,18 @@ export default function AcademyPage() {
         <p className="tok-name" style={{ letterSpacing: "0.16em", textTransform: "uppercase" }}>
           Academy
         </p>
-        <h1 style={{ fontFamily: "var(--f-display)", fontSize: "clamp(28px,4vw,44px)", letterSpacing: "-0.03em", margin: "8px 0 12px" }}>
-          Liquidity, taught the way LPs actually use it.
+        <h1
+          style={{
+            fontFamily: "var(--f-display)",
+            fontSize: "clamp(28px,4vw,44px)",
+            letterSpacing: "-0.03em",
+            margin: "8px 0 12px",
+          }}
+        >
+          Hear the ping, then sit in the pool.
         </h1>
         <p style={{ color: "var(--text-2)", maxWidth: "62ch", margin: 0, lineHeight: 1.65, fontSize: 16 }}>
-          Helix Academy is the short path from “what is a pool” to a live position. Full
+          {PROTOCOL.name} Academy is the short path from the meme to a live position. Full
           English. No seed phrases. No lockups. Open a lesson, then do the action in the app.
         </p>
       </div>

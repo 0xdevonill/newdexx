@@ -7,6 +7,7 @@ import { WalletButton } from "@/components/wallet-button";
 import { useAppState } from "@/lib/app-state";
 import { formatUsd } from "@/lib/format";
 import { useCatalog } from "@/lib/catalog";
+import { PROTOCOL } from "@/lib/tokens";
 
 export default function PositionsPage() {
   const { wallet, chain, positions, stakeDeposits, claimFees, withdrawPosition } = useAppState();
@@ -27,7 +28,7 @@ export default function PositionsPage() {
           </div>
           <h3>Connect to see positions</h3>
           <p>
-            Helix never asks for a seed phrase. Connect any standard wallet, mint a position
+            {PROTOCOL.name} never asks for a seed phrase. Connect any standard wallet, mint a position
             from Pools, or deposit into a Stake. Only your wallet can move what you put in.
           </p>
           <WalletButton />
@@ -41,8 +42,8 @@ export default function PositionsPage() {
       <div className="page-lead">
         <h1>Positions</h1>
         <p>
-          Once you mint, a card shows current value, holdings, unclaimed fees, and PnL. Helix
-          takes 7.5% from fees you claim, never from principal.
+          Once you mint, a card shows current value, holdings, unclaimed fees, and PnL.{" "}
+          {PROTOCOL.name} takes 7.5% from fees you claim, never from principal.
         </p>
       </div>
       {mine.length === 0 && stakes.length === 0 ? (

@@ -69,7 +69,7 @@ const rh: Draft[] = [
   { symbol: "AAPL", name: "Apple • Robinhood Token", quote: "USDG", mc: 5_270_000, change24h: 0.9, fees24h: 2_150, trades24h: 5453, vol24h: 4_300_000, ageHours: 74 * 24, lists: ["trending"] },
   { symbol: "musebook", name: "musebook", quote: "ETH", mc: 15_050_000, change24h: 58.8, fees24h: 37_610, trades24h: 24934, vol24h: 3_760_000, ageHours: 23, lists: ["trending"] },
   { symbol: "AI", name: "Artificial Inu", quote: "ETH", mc: 273_480_000, change24h: 3.6, fees24h: 33_060, trades24h: 1235, vol24h: 3_310_000, ageHours: 64 * 24, lists: ["trending"] },
-  { symbol: "HELIX", name: "Helix", quote: "ETH", mc: 14_420_000, change24h: 26.4, fees24h: 22_620, trades24h: 4501, vol24h: 2_260_000, ageHours: 47 * 24, featured: true, lists: ["trending", "established"] },
+  { symbol: "PING", name: "Fomo Ping", quote: "ETH", mc: 14_420_000, change24h: 26.4, fees24h: 22_620, trades24h: 4501, vol24h: 2_260_000, ageHours: 47 * 24, featured: true, lists: ["trending", "established"] },
   { symbol: "INU", name: "iNu", quote: "ETH", mc: 6_570_000, change24h: 73.1, fees24h: 16_260, trades24h: 7538, vol24h: 1_630_000, ageHours: 3 * 24, lists: ["trending", "established"] },
   { symbol: "SPY", name: "SPDR S&P 500 ETF Trust • Robinhood Token", quote: "USDG", mc: 24_270_000, change24h: 0.1, fees24h: null, trades24h: 1379, vol24h: 1_450_000, ageHours: 74 * 24, lists: ["trending", "established"] },
   { symbol: "PIPEDOG", name: "pipedog", quote: "ETH", mc: 30_320_000, change24h: 6.2, fees24h: 13_690, trades24h: 1145, vol24h: 1_370_000, ageHours: 50 * 24, lists: ["trending", "established"] },
@@ -101,7 +101,7 @@ const rh: Draft[] = [
 ];
 
 const sol: Draft[] = [
-  { symbol: "HELIX", name: "Helix", quote: "SOL", mc: 14_420_000, change24h: 26.4, fees24h: 22_620, trades24h: 4501, vol24h: 2_260_000, ageHours: 47 * 24, featured: true, lists: ["trending", "established"] },
+  { symbol: "PING", name: "Fomo Ping", quote: "SOL", mc: 14_420_000, change24h: 26.4, fees24h: 22_620, trades24h: 4501, vol24h: 2_260_000, ageHours: 47 * 24, featured: true, lists: ["trending", "established"] },
   { symbol: "BONK", name: "Bonk", quote: "SOL", mc: 892_400_000, change24h: 8.2, fees24h: 94_200, trades24h: 48210, vol24h: 41_200_000, ageHours: 90 * 24, lists: ["trending", "established"] },
   { symbol: "WIF", name: "dogwifhat", quote: "SOL", mc: 412_800_000, change24h: 12.4, fees24h: 38_400, trades24h: 22104, vol24h: 18_900_000, ageHours: 88 * 24, lists: ["trending", "established"] },
   { symbol: "JUP", name: "Jupiter", quote: "USDC", mc: 1_240_000_000, change24h: 3.1, fees24h: 52_100, trades24h: 18440, vol24h: 22_300_000, ageHours: 92 * 24, lists: ["trending", "established"] },
@@ -138,7 +138,7 @@ export const TOKENS: Token[] = [
 ];
 
 const rhStakes: { symbol: string; tvl: number; rate7d: number | null; fees24h: number }[] = [
-  { symbol: site.tokenSymbol || "HELIX", tvl: 5.0274, rate7d: 42.8, fees24h: 0.018 },
+  { symbol: site.tokenSymbol || "PING", tvl: 5.0274, rate7d: 42.8, fees24h: 0.018 },
   { symbol: "INU", tvl: 3.3873, rate7d: 0, fees24h: 0 },
   { symbol: "NVDA", tvl: 0.6756, rate7d: 0, fees24h: 0 },
   { symbol: "CASHCAT", tvl: 0.4915, rate7d: 163.33, fees24h: 0.22 },
@@ -154,7 +154,7 @@ const rhStakes: { symbol: string; tvl: number; rate7d: number | null; fees24h: n
 ];
 
 const solStakes: { symbol: string; tvl: number; rate7d: number | null; fees24h: number }[] = [
-  { symbol: site.tokenSymbol || "HELIX", tvl: 842.4, rate7d: 38.6, fees24h: 3.12 },
+  { symbol: site.tokenSymbol || "PING", tvl: 842.4, rate7d: 38.6, fees24h: 3.12 },
   { symbol: "BONK", tvl: 612.1, rate7d: 21.4, fees24h: 2.08 },
   { symbol: "JUP", tvl: 401.8, rate7d: 14.2, fees24h: 1.44 },
   { symbol: "WIF", tvl: 288.0, rate7d: 29.7, fees24h: 1.91 },
@@ -188,17 +188,18 @@ export const STAKES: Stake[] = [
 ];
 
 export const PROTOCOL = {
-  name: site.tokenName || "Helix",
-  token: site.tokenSymbol || "HELIX",
+  name: site.tokenName || "Fomo Ping",
+  token: site.tokenSymbol || "PING",
   tagline:
     site.tokenInfo ||
-    "Liquidity stakes and concentrated liquidity pools on Robinhood Chain and Solana. Stake into pools for a proportional share of trading fees, and build shaped positions from a single coin.",
+    "You heard it. That's the entry. Fair-launch meme on Robinhood Chain with real fee-sharing pools — not an official Robinhood product.",
   claimFee: 0.075,
   chainIdRh: 4663,
   x: site.xUrl,
   discord: site.discordUrl,
   ponsUrl: site.ponsUrl,
   ponsId: site.ponsId,
+  launchAt: site.launchAt,
   tokenInfo: site.tokenInfo,
   totals: {
     robinhood: { positions: 21441, fees: 3_201_988, tvl: 768_258, nativePrice: 2440.95, nativeLabel: "ETH Price" },
@@ -211,7 +212,14 @@ export function tokensFor(chain: ChainId): Token[] {
 }
 
 export function tokenById(id: string): Token | undefined {
-  return TOKENS.find((t) => t.id === id);
+  const direct = TOKENS.find((t) => t.id === id);
+  if (direct) return direct;
+  const lower = id.toLowerCase();
+  return TOKENS.find((t) => {
+    if (t.address.toLowerCase() === lower) return true;
+    if (`${t.chain}-${t.address}`.toLowerCase() === lower) return true;
+    return false;
+  });
 }
 
 export function featuredToken(chain: ChainId): Token {

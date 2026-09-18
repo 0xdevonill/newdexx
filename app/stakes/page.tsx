@@ -36,7 +36,7 @@ export default function StakesPage() {
         <h1>Stakes</h1>
         <p>
           Put your tokens into a stake and a share of those fees is yours. Deposit coins and
-          Helix builds the staked pool position for you.
+          Fomo Ping builds the staked pool position for you.
         </p>
       </div>
       <div className="stake-kpis">
@@ -137,7 +137,7 @@ export default function StakesPage() {
             <h3>Deposit into {activeToken?.symbol ?? "stake"}</h3>
           </div>
           <p style={{ margin: 0, color: "var(--text-2)", fontSize: 13.5, lineHeight: 1.55 }}>
-            Pick one coin or {quote} & token at the current pool ratio. Helix never hands you
+            Pick one coin or {quote} & token at the current pool ratio. Fomo Ping never hands you
             LP tokens. Leftover is refunded. Rewards stream over 7 days, paid in {quote}.
           </p>
           <div className="field">

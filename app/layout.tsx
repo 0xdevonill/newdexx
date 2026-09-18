@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Anton, Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { AppShell } from "@/components/app-shell";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppStateProvider } from "@/lib/app-state";
@@ -23,10 +23,19 @@ const display = Space_Grotesk({
   subsets: ["latin"],
 });
 
+const poster = Anton({
+  variable: "--font-poster",
+  weight: "400",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
-  title: PROTOCOL.name,
+  title: {
+    default: `${PROTOCOL.name} ($${PROTOCOL.token})`,
+    template: `%s · ${PROTOCOL.name}`,
+  },
   description: PROTOCOL.tagline,
-  icons: { icon: "/logo.jpg", apple: "/logo.jpg" },
+  icons: { icon: "/logo.png", apple: "/logo.png" },
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
@@ -35,7 +44,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       data-theme="dark"
-      className={`${sans.variable} ${mono.variable} ${display.variable} dark h-full antialiased`}
+      className={`${sans.variable} ${mono.variable} ${display.variable} ${poster.variable} dark h-full antialiased`}
     >
       <body className="min-h-full">
         <Web3Provider>

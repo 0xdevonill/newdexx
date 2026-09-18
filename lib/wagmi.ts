@@ -13,11 +13,11 @@ const connectors = [
           projectId: wallet.projectId,
           showQrModal: true,
           metadata: {
-            name: "Helix",
+            name: "Fomo Ping",
             description:
-              "Liquidity stakes and concentrated liquidity pools on Robinhood Chain.",
+              "The notification token of Robinhood Chain — fair launch, real LP fees.",
             url: "https://newdexx.vercel.app",
-            icons: ["https://newdexx.vercel.app/logo.jpg"],
+            icons: ["https://newdexx.vercel.app/logo.png"],
           },
         }),
       ]

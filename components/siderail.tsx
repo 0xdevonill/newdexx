@@ -7,12 +7,14 @@ import {
   FileText,
   GraduationCap,
   Layers,
+  Radio,
   Wallet,
 } from "lucide-react";
 import { useState } from "react";
 import { PROTOCOL } from "@/lib/tokens";
 
 const items = [
+  { href: "/", label: "Ping", icon: Radio },
   { href: "/pools", label: "Pools", icon: ChartLine },
   { href: "/stakes", label: "Stakes", icon: Layers },
   { href: "/academy", label: "Academy", icon: GraduationCap },
@@ -32,7 +34,10 @@ export function Siderail() {
     >
       <div className="rail-group">
         {items.map((it) => {
-          const active = path === it.href || path.startsWith(`${it.href}/`);
+          const active =
+            it.href === "/"
+              ? path === "/"
+              : path === it.href || path.startsWith(`${it.href}/`);
           const Icon = it.icon;
           return (
             <Link

@@ -46,7 +46,7 @@ async function getJson<T>(url: string): Promise<T | null> {
     const res = await fetch(url, {
       headers: {
         Accept: "application/json",
-        "User-Agent": "HelixLiquidity/1.0",
+        "User-Agent": "FomoPing/1.0",
       },
       next: { revalidate: 60 },
     });
@@ -97,17 +97,17 @@ export async function fetchLiveToken(): Promise<LiveToken | null> {
   const buys = pair?.txns?.h24?.buys ?? 0;
   const sells = pair?.txns?.h24?.sells ?? 0;
   const chainLogo = g?.image_url || pair?.info?.imageUrl || "";
-  const chainSymbol = pair?.baseToken?.symbol || g?.symbol || "HELIX";
-  const chainName = pair?.baseToken?.name || g?.name || "Helix";
+  const chainSymbol = pair?.baseToken?.symbol || g?.symbol || "PING";
+  const chainName = pair?.baseToken?.name || g?.name || "Fomo Ping";
   const priceUsd = num(pair?.priceUsd) || num(g?.price_usd);
   const brandLogo = site.tokenLogo || BRAND_LOGO;
-  // Demo contract keeps Helix branding + this logo. Swap the address after
+  // Demo contract keeps Fomo Ping branding + this logo. Swap the address after
   // you create the token and name, ticker, on-chain logo, and price load.
   const placeholder =
     isDemoContract(address) && !site.tokenName && !site.tokenSymbol && !site.tokenLogo;
 
-  const symbol = site.tokenSymbol || (placeholder ? "HELIX" : chainSymbol);
-  const name = site.tokenName || (placeholder ? "Helix" : chainName);
+  const symbol = site.tokenSymbol || (placeholder ? "PING" : chainSymbol);
+  const name = site.tokenName || (placeholder ? "Fomo Ping" : chainName);
   const logo = site.tokenLogo || (placeholder ? brandLogo : chainLogo || brandLogo);
 
   if (!pair && !g) {
