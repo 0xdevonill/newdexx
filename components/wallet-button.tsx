@@ -1,13 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 import { Wallet } from "lucide-react";
 import {
   useAccount,
-  useAccountEffect,
   useConnect,
   useDisconnect,
-  useSwitchChain,
 } from "wagmi";
 import {
   Dialog,
@@ -17,9 +23,20 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useAppState } from "@/lib/app-state";
+import { walletConnectProjectId } from "@/lib/env";
 import { shortAddr } from "@/lib/format";
-import { ROBINHOOD_CHAIN_ID } from "@/lib/robinhood-chain";
-import { wallet as walletEnv } from "@/lib/site";
+
+type WalletUi = {
+  openConnect: () => void;
+};
+
+const WalletUiCtx = createContext<WalletUi | null>(null);
+
+export function useWalletUi() {
+  const ctx = useContext(WalletUiCtx);
+  if (!ctx) throw new Error("useWalletUi must be used within WalletUiProvider");
+  return ctx;
+}
 
 function errorMessage(err: unknown): string {
   if (!err || typeof err !== "object") return "Wallet request failed.";
@@ -34,99 +51,56 @@ function errorMessage(err: unknown): string {
   return e.shortMessage || e.message || "Wallet request failed.";
 }
 
-export function WalletButton() {
-  const { wallet, connect, disconnect, setWallet, pushToast } = useAppState();
+function detectedInjected(): string {
+  if (typeof window === "undefined") return "Browser wallet";
+  const eth = window.ethereum as
+    | { isRabby?: boolean; isMetaMask?: boolean; isCoinbaseWallet?: boolean; isOkxWallet?: boolean; isBraveWallet?: boolean }
+    | undefined;
+  if (!eth) return "Browser wallet";
+  if (eth.isRabby) return "Rabby";
+  if (eth.isCoinbaseWallet) return "Coinbase Wallet";
+  if (eth.isOkxWallet) return "OKX";
+  if (eth.isBraveWallet) return "Brave";
+  if (eth.isMetaMask) return "MetaMask";
+  return "Browser wallet";
+}
+
+export function WalletUiProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
-  const live = walletEnv.live;
-  const { address, isConnected, chainId } = useAccount();
-  const { connectAsync, connectors } = useConnect();
-  const { disconnectAsync } = useDisconnect();
-  const { switchChainAsync } = useSwitchChain();
+  const { pushToast } = useAppState();
+  const { connectAsync, connectors, isPending } = useConnect();
 
-  useAccountEffect({
-    onConnect({ address: addr }) {
-      if (walletEnv.live) setWallet(addr);
-    },
-    onDisconnect() {
-      if (walletEnv.live) setWallet(null);
-    },
-  });
+  const openConnect = useCallback(() => setOpen(true), []);
 
-  const shown = live && isConnected && address ? address : wallet;
-  const wallets = ["MetaMask", "Rabby", "WalletConnect"];
-
-  const pickConnector = (kind: string) => {
-    const k = kind.toLowerCase();
-    if (k === "walletconnect") {
+  const pick = (kind: "injected" | "coinbase" | "walletconnect") => {
+    if (kind === "walletconnect") {
       return connectors.find((c) => /walletconnect/i.test(`${c.id} ${c.name}`));
     }
-    if (k === "metamask") {
-      return (
-        connectors.find((c) => /metamask/i.test(`${c.id} ${c.name}`)) ||
-        connectors.find((c) => c.id === "injected")
-      );
-    }
-    if (k === "rabby") {
-      return (
-        connectors.find((c) => /rabby/i.test(`${c.id} ${c.name}`)) ||
-        connectors.find((c) => c.id === "injected")
-      );
+    if (kind === "coinbase") {
+      return connectors.find((c) => /coinbase/i.test(`${c.id} ${c.name}`));
     }
     return connectors.find((c) => c.id === "injected") ?? connectors[0];
   };
 
-  const onDisconnect = async () => {
-    if (live) {
-      try {
-        await disconnectAsync();
-      } catch {
-        /* still clear local session */
-      }
-    }
-    disconnect();
-    pushToast("Wallet disconnected");
-  };
-
-  const onConnect = async (kind: string) => {
-    if (!live) {
-      connect(kind);
-      setOpen(false);
-      pushToast("Wallet connected", `${kind} · Robinhood Chain demo`);
-      return;
-    }
-    if (kind === "WalletConnect" && !walletEnv.projectId) {
+  const onConnect = async (kind: "injected" | "coinbase" | "walletconnect") => {
+    if (kind === "walletconnect" && !walletConnectProjectId) {
       pushToast(
         "WalletConnect needs a Project ID",
-        "Set NEXT_PUBLIC_WALLET_API to your Reown / WalletConnect Project ID and redeploy."
+        "Set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID from Reown Cloud and redeploy."
       );
       return;
     }
-    const connector = pickConnector(kind);
+    const connector = pick(kind);
     if (!connector) {
-      pushToast("Wallet not available", "No matching connector is configured.");
+      pushToast("Wallet not available", "That connector is not configured in this build.");
       return;
     }
     setBusy(kind);
     try {
-      const result = await connectAsync({
-        connector,
-        chainId: ROBINHOOD_CHAIN_ID,
-      });
-      const addr = result.accounts[0];
-      if (addr) setWallet(addr);
-      if (result.chainId !== ROBINHOOD_CHAIN_ID) {
-        try {
-          await switchChainAsync({ chainId: ROBINHOOD_CHAIN_ID });
-        } catch {
-          pushToast(
-            "Switch to Robinhood Chain",
-            "Approve Robinhood Chain (4663) in your wallet to continue."
-          );
-        }
-      }
+      await connectAsync({ connector });
       setOpen(false);
-      pushToast("Wallet connected", `${kind} on Robinhood Chain mainnet`);
+      pushToast("Wallet docked", "You can set a fare and sign the crossing.");
     } catch (err) {
       pushToast("Could not connect", errorMessage(err));
     } finally {
@@ -134,65 +108,133 @@ export function WalletButton() {
     }
   };
 
-  if (shown) {
-    const wrongNetwork = live && isConnected && chainId !== ROBINHOOD_CHAIN_ID;
+  const hasInjected = useSyncExternalStore(
+    () => () => undefined,
+    () => Boolean(window.ethereum),
+    () => false
+  );
+  const injectedName = useSyncExternalStore(
+    () => () => undefined,
+    () => detectedInjected(),
+    () => "Browser wallet"
+  );
+
+  const value = useMemo(() => ({ openConnect }), [openConnect]);
+  return (
+    <WalletUiCtx.Provider value={value}>
+      {children}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Dock a live wallet</DialogTitle>
+            <DialogDescription>
+              Quay never asks for a seed phrase. Approve the connection in your wallet, then pick a
+              departure chain.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="wallet-list">
+            <button
+              type="button"
+              className="wallet-opt"
+              disabled={Boolean(busy) || isPending || !hasInjected}
+              onClick={() => void onConnect("injected")}
+            >
+              <Wallet size={18} />
+              <span>
+                <b>{hasInjected ? injectedName : "No browser wallet"}</b>
+                <span>
+                  {hasInjected
+                    ? busy === "injected"
+                      ? "Connecting…"
+                      : "Injected · MetaMask, Rabby, Brave, OKX"
+                    : "Install MetaMask or Rabby, or use WalletConnect"}
+                </span>
+              </span>
+            </button>
+            <button
+              type="button"
+              className="wallet-opt"
+              disabled={Boolean(busy) || isPending}
+              onClick={() => void onConnect("coinbase")}
+            >
+              <Wallet size={18} />
+              <span>
+                <b>Coinbase Wallet</b>
+                <span>{busy === "coinbase" ? "Connecting…" : "Extension or smart wallet"}</span>
+              </span>
+            </button>
+            <button
+              type="button"
+              className="wallet-opt"
+              disabled={Boolean(busy) || isPending}
+              onClick={() => void onConnect("walletconnect")}
+            >
+              <Wallet size={18} />
+              <span>
+                <b>WalletConnect</b>
+                <span>
+                  {walletConnectProjectId
+                    ? busy === "walletconnect"
+                      ? "Connecting…"
+                      : "Scan a QR from Rainbow, Trust, or 300+ apps"
+                    : "Add NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID to enable QR connect"}
+                </span>
+              </span>
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </WalletUiCtx.Provider>
+  );
+}
+
+export function WalletButton() {
+  const { address, isConnected } = useAccount();
+  const { disconnectAsync } = useDisconnect();
+  const { openConnect } = useWalletUi();
+  const { pushToast } = useAppState();
+
+  if (isConnected && address) {
     return (
       <button
         type="button"
-        className="btn btn-ghost btn-sm wallet-chip"
+        className="wallet-btn ghost"
         onClick={() => {
-          if (wrongNetwork) {
-            void switchChainAsync({ chainId: ROBINHOOD_CHAIN_ID }).catch(() => {
-              pushToast("Switch to Robinhood Chain", "Approve network 4663 in your wallet.");
-            });
-            return;
-          }
-          void onDisconnect();
+          void disconnectAsync()
+            .catch(() => undefined)
+            .finally(() => pushToast("Wallet undocked"));
         }}
-        title={wrongNetwork ? "Switch to Robinhood Chain" : "Disconnect"}
+        title="Disconnect"
       >
-        <Wallet size={12} />
-        {wrongNetwork ? "Switch network" : shortAddr(shown)}
+        <Wallet size={14} />
+        {shortAddr(address)}
       </button>
     );
   }
 
   return (
-    <>
-      <button type="button" className="btn" onClick={() => setOpen(true)}>
-        <span className="btn-full">Connect Wallet</span>
-        <span className="btn-short">Connect</span>
-      </button>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="wallet-modal">
-          <DialogHeader>
-            <DialogTitle>Connect a wallet</DialogTitle>
-            <DialogDescription>
-              Helix.fun never asks for a seed phrase. Approve the connection, then we switch you to
-              Robinhood Chain (4663).
-            </DialogDescription>
-          </DialogHeader>
-          <div className="wallet-list">
-            {wallets.map((w) => (
-              <button
-                key={w}
-                type="button"
-                className="wallet-opt"
-                disabled={Boolean(busy)}
-                onClick={() => void onConnect(w)}
-              >
-                <span className="wallet-opt-mark">{w.slice(0, 1)}</span>
-                {busy === w ? "Connecting…" : w}
-              </button>
-            ))}
-          </div>
-          <p className="wallet-note">
-            {live
-              ? "Live mode: MetaMask, Rabby, or WalletConnect on Robinhood Chain mainnet (chain id 4663)."
-              : "Demo mode until NEXT_PUBLIC_WALLET_API is set. Connect still gives you an address so you can launch and trade locally."}
-          </p>
-        </DialogContent>
-      </Dialog>
-    </>
+    <button type="button" className="wallet-btn" onClick={openConnect}>
+      <Wallet size={14} />
+      Connect wallet
+    </button>
+  );
+}
+
+export function MiniWalletButton({ label }: { label: string }) {
+  const { address, isConnected } = useAccount();
+  const { openConnect } = useWalletUi();
+  if (isConnected && address) {
+    return (
+      <span className="pick" style={{ cursor: "default" }}>
+        <Wallet size={14} />
+        {shortAddr(address)}
+      </span>
+    );
+  }
+  return (
+    <button type="button" className="pick" onClick={openConnect}>
+      <Wallet size={14} />
+      {label}
+    </button>
   );
 }

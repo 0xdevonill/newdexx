@@ -1,80 +1,103 @@
-export type StoredToken = {
-  id: string;
-  address: string;
-  curveAddress: string;
-  pairAddress?: string;
-  name: string;
+export type CatalogToken = {
   symbol: string;
-  description: string;
-  logo: string;
-  twitter: string;
-  telegram: string;
-  website: string;
-  creator: string;
-  createdAt: number;
-  realEth: string;
-  tokenReserve: string;
-  totalSupply: string;
-  graduated: boolean;
-  graduatedAt?: number;
-  ammEth: string;
-  ammToken: string;
-  volumeEth: string;
-  txCount: number;
-  lastTradeAt: number;
-  featured?: boolean;
+  name: string;
+  address: string;
+  decimals: number;
+  logo?: string;
 };
 
-export type StoredTrade = {
+export type CatalogChain = {
+  id: number;
+  name: string;
+  displayName: string;
+  rpc: string;
+  explorerUrl: string;
+  explorerName: string;
+  iconUrl: string;
+  native: CatalogToken;
+  tokens: CatalogToken[];
+  depositEnabled: boolean;
+};
+
+export type SelectedAsset = {
+  chainId: number;
+  token: CatalogToken;
+};
+
+export type QuoteFee = {
+  amountUsd?: string;
+  amountFormatted?: string;
+  currency?: { symbol?: string };
+};
+
+export type QuoteStepItem = {
+  status?: string;
+  data?: {
+    from?: string;
+    to?: string;
+    data?: string;
+    value?: string | Record<string, unknown>;
+    chainId?: number;
+    gas?: string;
+    signatureKind?: string;
+    domain?: Record<string, unknown>;
+    types?: Record<string, unknown>;
+    message?: string;
+    primaryType?: string;
+  };
+  check?: { endpoint?: string; method?: string };
+};
+
+export type QuoteStep = {
+  id?: string;
+  action?: string;
+  description?: string;
+  kind?: string;
+  requestId?: string;
+  items?: QuoteStepItem[];
+};
+
+export type RelayQuote = {
+  requestId?: string;
+  steps?: QuoteStep[];
+  fees?: Record<string, QuoteFee>;
+  details?: {
+    timeEstimate?: number;
+    rate?: string;
+    operation?: string;
+    sender?: string;
+    recipient?: string;
+    currencyIn?: {
+      amountFormatted?: string;
+      amountUsd?: string;
+      amount?: string;
+      currency?: { symbol?: string; decimals?: number };
+    };
+    currencyOut?: {
+      amountFormatted?: string;
+      amountUsd?: string;
+      amount?: string;
+      minimumAmount?: string;
+      currency?: { symbol?: string; decimals?: number };
+    };
+    totalImpact?: { usd?: string; percent?: string };
+    userBalance?: string;
+  };
+  message?: string;
+  error?: string;
+};
+
+export type CrossingLog = {
   id: string;
-  tokenId: string;
-  trader: string;
-  isBuy: boolean;
-  ethAmount: string;
-  tokenAmount: string;
-  fee: string;
-  priceUsd: number;
-  marketCapUsd: number;
+  requestId?: string;
+  fromChainId: number;
+  toChainId: number;
+  fromSymbol: string;
+  toSymbol: string;
+  amountIn: string;
+  amountOut: string;
+  hash?: string;
+  explorerUrl?: string;
+  status: "pending" | "success" | "failed";
   ts: number;
-  txHash?: string;
-};
-
-export type StoredComment = {
-  id: string;
-  tokenId: string;
-  user: string;
-  text: string;
-  createdAt: number;
-};
-
-export type StoredHolder = {
-  address: string;
-  balance: string;
-};
-
-export type LaunchpadStore = {
-  tokens: StoredToken[];
-  trades: StoredTrade[];
-  comments: StoredComment[];
-  /** tokenId -> trader -> token wei */
-  balances: Record<string, Record<string, string>>;
-  lastBlock?: number;
-};
-
-export type TokenView = StoredToken & {
-  marketCapUsd: number;
-  priceUsd: number;
-  progressBps: number;
-  change24h: number;
-  volume24hUsd: number;
-  replies: number;
-  holders: number;
-  ageHours: number;
-  king?: boolean;
-};
-
-export type ProfileView = {
-  address: string;
-  created: TokenView[];
-  held: { token: TokenView; balance: string; valueUsd: number }[];
 };
