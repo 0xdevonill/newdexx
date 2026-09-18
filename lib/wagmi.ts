@@ -1,33 +1,39 @@
 "use client";
 
 import { createConfig, http, injected } from "wagmi";
-import { walletConnect } from "wagmi/connectors";
-import { robinhoodChain } from "@/lib/robinhood-chain";
-import { wallet } from "@/lib/site";
+import { coinbaseWallet, walletConnect } from "wagmi/connectors";
+import { BRAND } from "@/lib/brand";
+import { walletConnectProjectId } from "@/lib/env";
+import { appChains } from "@/lib/viem-chains";
+
+const metadata = {
+  name: BRAND.name,
+  description: BRAND.description,
+  url: "https://localhost",
+  icons: ["/icon.svg"],
+};
 
 const connectors = [
   injected({ shimDisconnect: true }),
-  ...(wallet.projectId
+  coinbaseWallet({ appName: BRAND.name }),
+  ...(walletConnectProjectId && !/^https?:\/\//i.test(walletConnectProjectId)
     ? [
         walletConnect({
-          projectId: wallet.projectId,
+          projectId: walletConnectProjectId,
           showQrModal: true,
-          metadata: {
-            name: "Helix.fun",
-            description: "Meme token launchpad on Robinhood Chain.",
-            url: "https://newdexx.vercel.app",
-            icons: ["https://newdexx.vercel.app/icon.svg"],
-          },
+          metadata,
         }),
       ]
     : []),
 ];
 
+const transports = Object.fromEntries(
+  appChains.map((chain) => [chain.id, http(chain.rpcUrls.default.http[0])])
+);
+
 export const wagmiConfig = createConfig({
-  chains: [robinhoodChain],
+  chains: appChains,
   connectors,
-  transports: {
-    [robinhoodChain.id]: http(wallet.rpc),
-  },
+  transports,
   ssr: true,
 });

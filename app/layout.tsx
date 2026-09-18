@@ -1,15 +1,22 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Fraunces, Figtree, JetBrains_Mono } from "next/font/google";
+import type { ReactNode } from "react";
 import { AppShell } from "@/components/app-shell";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AppStateProvider } from "@/lib/app-state";
-import { PROTOCOL } from "@/lib/protocol";
 import { Web3Provider } from "@/components/web3-provider";
+import { AppStateProvider } from "@/lib/app-state";
+import { BRAND } from "@/lib/brand";
 import "./globals.css";
 
-const sans = Inter({
+const sans = Figtree({
   variable: "--font-sans",
   subsets: ["latin"],
+});
+
+const display = Fraunces({
+  variable: "--font-display",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
 });
 
 const mono = JetBrains_Mono({
@@ -17,23 +24,22 @@ const mono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-const display = Space_Grotesk({
-  variable: "--font-display",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: PROTOCOL.name,
-  description: PROTOCOL.tagline,
+  title: `${BRAND.name} — ${BRAND.tagline}`,
+  description: BRAND.description,
   icons: { icon: "/icon.svg" },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   return (
     <html
       lang="en"
-      data-theme="dark"
-      className={`${sans.variable} ${mono.variable} ${display.variable} dark h-full antialiased`}
+      data-theme="light"
+      className={`${sans.variable} ${display.variable} ${mono.variable} light h-full antialiased`}
     >
       <body className="min-h-full">
         <Web3Provider>
